@@ -39,7 +39,7 @@ app.get("/pedidos", async (req, res) => {
         numitens,
         vltotal
       FROM pcpedc
-      WHERE data BETWEEN TO_DATE(:dataInicio,'YYYY-MM-DD')
+      WHERE TRUNC(data) BETWEEN TO_DATE(:dataInicio,'YYYY-MM-DD')
       AND TO_DATE(:dataFim,'YYYY-MM-DD')
     `;
 
@@ -50,7 +50,7 @@ app.get("/pedidos", async (req, res) => {
 
     if (codcli) {
       sql += " AND codcli = :codcli";
-      binds.codcli = codcli;
+      binds.codcli = Number(codcli);
     }
 
     sql += " ORDER BY data DESC";
@@ -67,9 +67,8 @@ app.get("/pedidos", async (req, res) => {
 
   } catch (err) {
 
-    console.error(err);
-
-    res.status(500).json({ erro: "Erro ao buscar pedidos" });
+    console.error("ERRO REAL:", err);
+    res.status(500).json({ erro: err.message });
 
   }
 
