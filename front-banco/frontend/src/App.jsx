@@ -48,8 +48,8 @@ function App() {
   };
 
   return (
-    <Container maxWidth={false} sx={{ backgroundColor: "white", minHeight: "100vh", padding: 4, borderRadius: 2 }}>
-      <h2 style={{color: "#fffffff", background: "black", padding: "10px"}}>Consulta de Pedidos</h2>
+    <Container maxWidth={false} sx={{ backgroundColor: "#ffffff", minHeight: "100vh", padding: 4, borderRadius: 2 }}>
+      <h2 style={{color: "#ffffff", background: "linear-gradient(90deg, #F36F21, #EC008C)", padding: "10px"}}>Consulta de Pedidos</h2>
       <div style={{ display: "flex", gap: 10, marginBottom: 20, marginTop: 40 }}>
 
         <TextField
@@ -82,15 +82,15 @@ function App() {
           value={codcli}
           onChange={(e) => setCodcli(e.target.value)}/>
 
-        <Button variant="contained" onClick={buscarPedidos} style={{background: "#000000"}}>
-          <b>Procurar</b>
+        <Button variant="contained" onClick={buscarPedidos} style={{ background: "linear-gradient(90deg, #F36F21, #EC008C)"}}>
+          <b style={{ color: "#000000" }}>Procurar</b>
         </Button> 
       </div>
 
-      <h3 style={{ marginTop: 40, color: "#ffffff", background: "#000000", padding:"10px"}}>Pedidos</h3>
+      <h3 style={{ marginTop: 40, color: "#ffffff", background: "linear-gradient(90deg, #F36F21, #EC008C)", padding:"10px"}}>Pedidos</h3>
       <Table>
         <TableHead>
-          <TableRow style={{ border: "2px #000000" }}>
+          <TableRow>
 
             <TableCell>Pedido</TableCell>
             <TableCell>Data</TableCell>
@@ -123,7 +123,7 @@ function App() {
         </TableBody>
       </Table>
 
-      <h3 style={{ marginTop: 40, color: "#ffffff", background: "#000000", padding:"10px" }}>Produtos do Pedido</h3>
+      <h3 style={{ marginTop: 40, color: "#ffffff", background: "linear-gradient(90deg, #F36F21, #EC008C)", padding:"10px" }}>Produtos do Pedido</h3>
 
       <Table>
         <TableHead>

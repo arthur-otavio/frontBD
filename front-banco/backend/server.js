@@ -1,6 +1,8 @@
 import express from "express";
 import oracledb from "oracledb";
 import cors from "cors";
+import dotenv from "dotenv";
+dotenv.config();
 
 const app = express();
 
@@ -8,12 +10,11 @@ app.use(cors());
 app.use(express.json());
 
 const dbConfig = {
-  user: "SISTEMA",
-  password: "SISTEMA",
-  connectString: "192.168.0.188/WINT"
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  connectString: process.env.DB_CONNECT
 };
 
-/* teste api rodando */
 app.get("/", (req, res) => {
   res.send("API Oracle funcionando 🚀");
 });
@@ -44,7 +45,7 @@ app.get("/pedidos", async (req, res) => {
       dataFim
     };
     if (codcli) {
-      sql += " AND codcli = :codcli";
+      sql = " AND codcli = :codcli";
       binds.codcli = Number(codcli);
     }
     sql += " ORDER BY data DESC";
