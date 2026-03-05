@@ -15,25 +15,20 @@ function App() {
   const [dataInicio, setDataInicio] = useState("");
   const [dataFim, setDataFim] = useState("");
   const [codcli, setCodcli] = useState("");
-
   const [pedidos, setPedidos] = useState([]);
   const [itens, setItens] = useState([]);
 
   const buscarPedidos = async () => {
-
     let url = `http://localhost:3000/pedidos?dataInicio=${dataInicio}&dataFim=${dataFim}`;
-
     if (codcli) {
       url += `&codcli=${codcli}`;
     }
-
     const res = await fetch(url);
-
     const contentType = res.headers.get("content-type") || "";
 
     if (!res.ok) {
-      const body = await res.text(); // pra ver o HTML/erro real
-      throw new Error(`HTTP ${res.status} - ${body}`);
+      const body = await res.text(); // pra ver o erro real respondendo em HTML
+      throw new Error(`HTML -> ${res.status} - ${body}`);
     }
 
     if (!contentType.includes("application/json")) {
@@ -42,28 +37,20 @@ function App() {
     }
 
     const data = await res.json();
-
     setPedidos(data);
     setItens([]);
-
   };
 
   const carregarItens = async (numped) => {
-
     const res = await fetch(`http://localhost:3000/pedido/${numped}/itens`);
     const data = await res.json();
-
     setItens(data);
-
   };
 
   return (
-
-    <Container>
-
-      <h2>Consulta de Pedidos</h2>
-
-      <div style={{ display: "flex", gap: 10, marginBottom: 20 }}>
+    <Container maxWidth={false} sx={{ backgroundColor: "white", minHeight: "100vh", padding: 4, borderRadius: 2 }}>
+      <h2 style={{color: "#fffffff", background: "black", padding: "10px"}}>Consulta de Pedidos</h2>
+      <div style={{ display: "flex", gap: 10, marginBottom: 20, marginTop: 40 }}>
 
         <TextField
           type="date"
@@ -71,6 +58,11 @@ function App() {
           InputLabelProps={{ shrink: true }}
           value={dataInicio}
           onChange={(e) => setDataInicio(e.target.value)}
+          sx={{
+            "& input::-webkit-calendar-picker-indicator": {
+              filter: "invert(1)"
+            }
+          }}
         />
 
         <TextField
@@ -79,27 +71,26 @@ function App() {
           InputLabelProps={{ shrink: true }}
           value={dataFim}
           onChange={(e) => setDataFim(e.target.value)}
-        />
+          sx={{
+            "& input::-webkit-calendar-picker-indicator": {
+              filter: "invert(1)"
+            }
+          }}/>
 
         <TextField
           label="Código Cliente"
           value={codcli}
-          onChange={(e) => setCodcli(e.target.value)}
-        />
+          onChange={(e) => setCodcli(e.target.value)}/>
 
-        <Button variant="contained" onClick={buscarPedidos}>
-          Procurar
+        <Button variant="contained" onClick={buscarPedidos} style={{background: "#000000"}}>
+          <b>Procurar</b>
         </Button> 
-
       </div>
 
-      <h3>Pedidos</h3>
-
+      <h3 style={{ marginTop: 40, color: "#ffffff", background: "#000000", padding:"10px"}}>Pedidos</h3>
       <Table>
-
         <TableHead>
-
-          <TableRow>
+          <TableRow style={{ border: "2px #000000" }}>
 
             <TableCell>Pedido</TableCell>
             <TableCell>Data</TableCell>
@@ -110,7 +101,6 @@ function App() {
           </TableRow>
 
         </TableHead>
-
         <TableBody>
 
           {pedidos.map((p, i) => (
@@ -119,8 +109,7 @@ function App() {
               key={i}
               hover
               style={{ cursor: "pointer" }}
-              onClick={() => carregarItens(p.NUMPED)}
-            >
+              onClick={() => carregarItens(p.NUMPED)}>
 
               <TableCell>{p.NUMPED}</TableCell>
               <TableCell>{p.DATA}</TableCell>
@@ -129,19 +118,15 @@ function App() {
               <TableCell>{p.VLTOTAL}</TableCell>
 
             </TableRow>
-
           ))}
 
         </TableBody>
-
       </Table>
 
-      <h3 style={{ marginTop: 40 }}>Produtos do Pedido</h3>
+      <h3 style={{ marginTop: 40, color: "#ffffff", background: "#000000", padding:"10px" }}>Produtos do Pedido</h3>
 
       <Table>
-
         <TableHead>
-
           <TableRow>
 
             <TableCell>Produto</TableCell>
@@ -150,7 +135,6 @@ function App() {
             <TableCell>Preço</TableCell>
 
           </TableRow>
-
         </TableHead>
 
         <TableBody>
@@ -165,15 +149,11 @@ function App() {
               <TableCell>{i.PVENDA}</TableCell>
 
             </TableRow>
-
           ))}
-
         </TableBody>
-
       </Table>
 
     </Container>
-
   );
 }
 

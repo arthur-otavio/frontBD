@@ -13,20 +13,16 @@ const dbConfig = {
   connectString: "192.168.0.188/WINT"
 };
 
-/* TESTE */
-
+/* teste api rodando */
 app.get("/", (req, res) => {
   res.send("API Oracle funcionando 🚀");
 });
 
-/* BUSCAR PEDIDOS */
-
+/* busca pedidos */
 app.get("/pedidos", async (req, res) => {
-
   const { dataInicio, dataFim, codcli } = req.query;
 
   try {
-
     const connection = await oracledb.getConnection(dbConfig);
 
     let sql = `
@@ -47,14 +43,11 @@ app.get("/pedidos", async (req, res) => {
       dataInicio,
       dataFim
     };
-
     if (codcli) {
       sql += " AND codcli = :codcli";
       binds.codcli = Number(codcli);
     }
-
     sql += " ORDER BY data DESC";
-
     const result = await connection.execute(
       sql,
       binds,
@@ -62,28 +55,20 @@ app.get("/pedidos", async (req, res) => {
     );
 
     await connection.close();
-
     res.json(result.rows);
-
-  } catch (err) {
-
+  } 
+  catch (err) {
     console.error("erro:", err);
     res.status(500).json({ erro: err.message });
-
   }
-
 });
 
-/* BUSCAR ITENS DO PEDIDO */
-
+/* busca itens do pedido */
 app.get("/pedido/:numped/itens", async (req, res) => {
-
   const numped = req.params.numped;
 
   try {
-
     const connection = await oracledb.getConnection(dbConfig);
-
     const result = await connection.execute(
       `
       SELECT
@@ -105,15 +90,11 @@ app.get("/pedido/:numped/itens", async (req, res) => {
     );
 
     await connection.close();
-
     res.json(result.rows);
-
-  } catch (err) {
-
+  } 
+  catch (err) {
     console.error(err);
-
     res.status(500).json({ erro: "Erro ao buscar itens do pedido" });
-
   }
 
 });
