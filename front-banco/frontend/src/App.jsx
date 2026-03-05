@@ -67,7 +67,7 @@ function App() {
 
         <TextField
           type="date"
-          label="Data Início"
+          label="Data de Início"
           InputLabelProps={{ shrink: true }}
           value={dataInicio}
           onChange={(e) => setDataInicio(e.target.value)}
@@ -75,7 +75,7 @@ function App() {
 
         <TextField
           type="date"
-          label="Data Fim"
+          label="Data do Fim"
           InputLabelProps={{ shrink: true }}
           value={dataFim}
           onChange={(e) => setDataFim(e.target.value)}
@@ -88,7 +88,7 @@ function App() {
         />
 
         <Button variant="contained" onClick={buscarPedidos}>
-          Buscar
+          Procurar
         </Button> 
 
       </div>

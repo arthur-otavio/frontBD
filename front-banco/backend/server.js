@@ -67,7 +67,7 @@ app.get("/pedidos", async (req, res) => {
 
   } catch (err) {
 
-    console.error("ERRO REAL:", err);
+    console.error("erro:", err);
     res.status(500).json({ erro: err.message });
 
   }
