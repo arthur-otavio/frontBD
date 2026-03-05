@@ -1,3 +1,0 @@
--- Fazer uma tela que eu busco os pedidos por intervalo de data e possibilidade de pesquisar tambem pelo codigo de cliente.
--- Listar todos pedidos encontrados no filtro (periodo e cliente)
--- Permitir clicar no pedido e me mostrar os produtos dentro do pedido

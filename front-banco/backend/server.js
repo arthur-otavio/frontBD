@@ -28,27 +28,30 @@ app.get("/pedidos", async (req, res) => {
 
     let sql = `
       SELECT
-        codfilial,
-        data,
-        codcli,
-        numped,
-        totpeso,
-        numitens,
-        vltotal
-      FROM pcpedc
-      WHERE TRUNC(data) BETWEEN TO_DATE(:dataInicio,'YYYY-MM-DD')
+        ped.codfilial,
+        ped.data,
+        ped.codcli,
+        cli.cliente,
+        ped.numped,
+        ped.totpeso,
+        ped.numitens,
+        ped.vltotal
+      FROM pcpedc ped
+      JOIN pcclient cli
+        ON cli.codcli = ped.codcli
+      WHERE TRUNC(ped.data) BETWEEN TO_DATE(:dataInicio,'YYYY-MM-DD')
       AND TO_DATE(:dataFim,'YYYY-MM-DD')
     `;
 
-    let binds = {
-      dataInicio,
-      dataFim
-    };
+    let binds = { dataInicio, dataFim };
+
     if (codcli) {
-      sql += " AND codcli = :codcli";
+      sql += " AND ped.codcli = :codcli";
       binds.codcli = Number(codcli);
     }
-    sql += " ORDER BY data DESC";
+
+    sql += " ORDER BY ped.data DESC";
+
     const result = await connection.execute(
       sql,
       binds,
@@ -57,21 +60,22 @@ app.get("/pedidos", async (req, res) => {
 
     await connection.close();
     res.json(result.rows);
-  } 
-  catch (err) {
-    console.error("erro:", err);
+
+  } catch (err) {
+    console.error(err);
     res.status(500).json({ erro: err.message });
   }
 });
 
 /* busca itens do pedido */
 app.get("/pedido/:numped/itens", async (req, res) => {
+
   const numped = req.params.numped;
 
   try {
     const connection = await oracledb.getConnection(dbConfig);
-    const result = await connection.execute(
-      `
+
+    const result = await connection.execute(`
       SELECT
         i.codprod,
         p.descricao,
@@ -79,23 +83,30 @@ app.get("/pedido/:numped/itens", async (req, res) => {
         i.ptabela,
         i.perdesc,
         i.pvenda,
+        ROUND(i.qt * i.pvenda, 2) vltotalitem,
+        ROUND(i.perdesc, 2) perdesc_formatado,
         i.tipoentrega,
         i.codfilialretira
       FROM pcpedi i
       JOIN pcprodut p
         ON p.codprod = i.codprod
       WHERE i.numped = :numped
-      `,
-      [numped],
-      { outFormat: oracledb.OUT_FORMAT_OBJECT }
-    );
+    `,
+    [numped],
+    { outFormat: oracledb.OUT_FORMAT_OBJECT });
 
     await connection.close();
+
     res.json(result.rows);
-  } 
-  catch (err) {
+
+  } catch (err) {
+
     console.error(err);
-    res.status(500).json({ erro: "Erro ao buscar itens do pedido" });
+
+    res.status(500).json({
+      erro: "Erro ao buscar itens do pedido"
+    });
+
   }
 
 });

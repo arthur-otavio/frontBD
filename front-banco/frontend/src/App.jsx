@@ -18,6 +18,31 @@ function App() {
   const [pedidos, setPedidos] = useState([]);
   const [itens, setItens] = useState([]);
 
+  const moeda = (valor) => {
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL"
+    }).format(valor);
+  };
+
+  const porcentagem = (valor) => {
+    return `${Number(valor).toFixed(2)} %`;
+  };
+
+  const formatarDataHora = (data) => {
+    if (!data) return "";
+
+    const d = new Date(data);
+
+    return d.toLocaleString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  };
+
   const buscarPedidos = async () => {
     let url = `http://localhost:3000/pedidos?dataInicio=${dataInicio}&dataFim=${dataFim}`;
     if (codcli) {
@@ -42,13 +67,15 @@ function App() {
   };
 
   const carregarItens = async (numped) => {
-    const res = await fetch(`http://localhost:3000/pedido/${numped}/itens`);
-    const data = await res.json();
-    setItens(data);
+
+    const resItens = await fetch(`http://localhost:3000/pedido/${numped}/itens`);
+    const dataItens = await resItens.json();
+
+    setItens(dataItens);
   };
 
   return (
-    <Container maxWidth={false} sx={{ backgroundColor: "#332C2C", minHeight: "100vh", padding: 4, borderRadius: 2 }}>
+    <Container maxWidth={false} sx={{ backgroundColor: "#332C2C", minHeight: "100vh", display: "grid",alignContent: "center", justifyContent: "center" }}>
       <h2 style={{color: "#ffffff", background: "linear-gradient(90deg, #F36F21, #EC008C)", padding: "10px"}}>
         Consulta de Pedidos
       </h2>
@@ -143,17 +170,39 @@ function App() {
         />
 
         <Button variant="contained" onClick={buscarPedidos} style={{ background: "linear-gradient(90deg, #F36F21, #EC008C)"}}>
-          <b style={{ color: "#000000" }}>Procurar</b>
+          <b style={{ color: "#ffffff" }}>Procurar</b>
         </Button> 
       </div>
+
+      <h3 style={{ marginTop: 40, color: "#ffffff", background: "linear-gradient(90deg, #F36F21, #EC008C)", padding:"10px"}}>Cliente</h3>
+      <Table>
+
+        <TableHead>
+          <TableRow>
+            <TableCell style={{ color: "#ffffff" }}>Código Cliente</TableCell>
+            <TableCell style={{ color: "#ffffff" }}>Nome Cliente</TableCell>
+          </TableRow>
+        </TableHead>
+
+        <TableBody>
+          {pedidos.length > 0 && (
+            <TableRow>
+              <TableCell style={{ color: "#ffffff" }}>{pedidos[0].CODCLI}</TableCell>
+              <TableCell style={{ color: "#ffffff" }}>{pedidos[0].CLIENTE}</TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
 
       <h3 style={{ marginTop: 40, color: "#ffffff", background: "linear-gradient(90deg, #F36F21, #EC008C)", padding:"10px"}}>Pedidos</h3>
       <Table>
         <TableHead>
           <TableRow>
 
-            <TableCell style={{ color: "#ffffff" }}>Pedido</TableCell>
-            <TableCell style={{ color: "#ffffff" }}>Data</TableCell>
+            <TableCell style={{ color: "#ffffff" }}>Código Filial</TableCell>
+            <TableCell style={{ color: "#ffffff" }}>Código Pedido</TableCell>
+            <TableCell style={{ color: "#ffffff" }}>Total Peso</TableCell>
+            <TableCell style={{ color: "#ffffff" }}>Data</TableCell> 
             <TableCell style={{ color: "#ffffff" }}>Cliente</TableCell>
             <TableCell style={{ color: "#ffffff" }}>Itens</TableCell>
             <TableCell style={{ color: "#ffffff" }}>Valor</TableCell>
@@ -170,12 +219,14 @@ function App() {
               hover
               style={{ cursor: "pointer" }}
               onClick={() => carregarItens(p.NUMPED)}>
-
+              
+              <TableCell style={{ color: "#ffffff" }}>{p.CODFILIAL}</TableCell>
               <TableCell style={{ color: "#ffffff" }}>{p.NUMPED}</TableCell>
-              <TableCell style={{ color: "#ffffff" }}>{p.DATA}</TableCell>
+              <TableCell style={{ color: "#ffffff" }}>{p.TOTPESO}</TableCell>
+              <TableCell style={{ color: "#ffffff" }}>{formatarDataHora(p.DATA)}</TableCell> 
               <TableCell style={{ color: "#ffffff" }}>{p.CODCLI}</TableCell>
               <TableCell style={{ color: "#ffffff" }}>{p.NUMITENS}</TableCell>
-              <TableCell style={{ color: "#ffffff" }}>{p.VLTOTAL}</TableCell>
+              <TableCell style={{ color: "#ffffff" }}>{moeda(p.VLTOTAL)}</TableCell>
 
             </TableRow>
           ))}
@@ -189,10 +240,14 @@ function App() {
         <TableHead>
           <TableRow>
 
-            <TableCell style={{ color: "#ffffff" }}>Produto</TableCell>
+            <TableCell style={{ color: "#ffffff" }}>Código Filial</TableCell>
+            <TableCell style={{ color: "#ffffff" }}>Código Produto</TableCell>
             <TableCell style={{ color: "#ffffff" }}>Descrição</TableCell>
             <TableCell style={{ color: "#ffffff" }}>Quantidade</TableCell>
-            <TableCell style={{ color: "#ffffff" }}>Preço</TableCell>
+            <TableCell style={{ color: "#ffffff" }}>Preço Tabela</TableCell>
+            <TableCell style={{ color: "#ffffff" }}>Tipo de Entrega</TableCell>
+            <TableCell style={{ color: "#ffffff" }}>% Desc</TableCell>
+            <TableCell style={{ color: "#ffffff" }}>Preço Venda</TableCell>
 
           </TableRow>
         </TableHead>
@@ -203,10 +258,14 @@ function App() {
 
             <TableRow key={index}>
 
+              <TableCell style={{ color: "#ffffff" }}>{i.CODFILIALRETIRA}</TableCell>
               <TableCell style={{ color: "#ffffff" }}>{i.CODPROD}</TableCell>
               <TableCell style={{ color: "#ffffff" }}>{i.DESCRICAO}</TableCell>
               <TableCell style={{ color: "#ffffff" }}>{i.QT}</TableCell>
-              <TableCell style={{ color: "#ffffff" }}>{i.PVENDA}</TableCell>
+              <TableCell style={{ color: "#ffffff" }}>{moeda(i.PTABELA)}</TableCell>
+              <TableCell style={{ color: "#ffffff" }}>{i.TIPOENTREGA}</TableCell>
+              <TableCell style={{ color: "#ffffff" }}>{porcentagem(i.PERDESC)}</TableCell>
+              <TableCell style={{ color: "#ffffff" }}>{moeda(i.PVENDA)}</TableCell>
 
             </TableRow>
           ))}
