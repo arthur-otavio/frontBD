@@ -45,7 +45,7 @@ app.get("/pedidos", async (req, res) => {
       dataFim
     };
     if (codcli) {
-      sql = " AND codcli = :codcli";
+      sql += " AND codcli = :codcli";
       binds.codcli = Number(codcli);
     }
     sql += " ORDER BY data DESC";
@@ -103,3 +103,5 @@ app.get("/pedido/:numped/itens", async (req, res) => {
 app.listen(3000, () => {
   console.log("Servidor rodando na porta 3000 🚀");
 });
+
+/* 146519 CODCLI para testes -> Guilherme */

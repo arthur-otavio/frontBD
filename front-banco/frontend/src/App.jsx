@@ -33,7 +33,7 @@ function App() {
 
     if (!contentType.includes("application/json")) {
       const body = await res.text();
-      throw new Error(`Resposta não é JSON. Content-Type=${contentType}. Body=${body}`);
+      throw new Error(`não é JSON. Content-Type=${contentType}. Body=${body}`);
     }
 
     const data = await res.json();
@@ -48,8 +48,10 @@ function App() {
   };
 
   return (
-    <Container maxWidth={false} sx={{ backgroundColor: "#ffffff", minHeight: "100vh", padding: 4, borderRadius: 2 }}>
-      <h2 style={{color: "#ffffff", background: "linear-gradient(90deg, #F36F21, #EC008C)", padding: "10px"}}>Consulta de Pedidos</h2>
+    <Container maxWidth={false} sx={{ backgroundColor: "#332C2C", minHeight: "100vh", padding: 4, borderRadius: 2 }}>
+      <h2 style={{color: "#ffffff", background: "linear-gradient(90deg, #F36F21, #EC008C)", padding: "10px"}}>
+        Consulta de Pedidos
+      </h2>
       <div style={{ display: "flex", gap: 10, marginBottom: 20, marginTop: 40 }}>
 
         <TextField
@@ -59,8 +61,25 @@ function App() {
           value={dataInicio}
           onChange={(e) => setDataInicio(e.target.value)}
           sx={{
+            "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderColor: "#ffffff"
+            },
+            "&:hover fieldset": {
+              borderColor: "#ffffff"
+            },
+            "&.Mui-focused fieldset": {
+              borderColor: "#ffffff"
+            }
+            },
+            "& label": {
+              color: "#ffffff"
+            },
+            "& input": {
+              color: "#ffffff"
+            },
             "& input::-webkit-calendar-picker-indicator": {
-              filter: "invert(1)"
+              filter: "invert(0)"
             }
           }}
         />
@@ -72,15 +91,56 @@ function App() {
           value={dataFim}
           onChange={(e) => setDataFim(e.target.value)}
           sx={{
-            "& input::-webkit-calendar-picker-indicator": {
-              filter: "invert(1)"
-            }
-          }}/>
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                borderColor: "#ffffff"
+              },
+              "&:hover fieldset": {
+                borderColor: "#ffffff"
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: "#ffffff"
+              }
+              },
+              "& label": {
+                color: "#ffffff"
+              },
+              "& input": {
+                color: "#ffffff"
+              },
+              "& input::-webkit-calendar-picker-indicator": {
+                filter: "invert(0)"
+              }
+          }}
+        />
 
         <TextField
           label="Código Cliente"
           value={codcli}
-          onChange={(e) => setCodcli(e.target.value)}/>
+          onChange={(e) => setCodcli(e.target.value)}
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              "& fieldset": {
+                borderColor: "#ffffff"
+              },
+              "&:hover fieldset": {
+                borderColor: "#ffffff"
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: "#ffffff"
+              },
+              },
+              "& label": {
+                color: "#ffffff"
+              },
+              "& input": {
+                color: "#ffffff"
+              },
+              "& input::-webkit-calendar-picker-indicator": {
+                filter: "invert(1)"
+              }
+            }}
+        />
 
         <Button variant="contained" onClick={buscarPedidos} style={{ background: "linear-gradient(90deg, #F36F21, #EC008C)"}}>
           <b style={{ color: "#000000" }}>Procurar</b>
@@ -92,11 +152,11 @@ function App() {
         <TableHead>
           <TableRow>
 
-            <TableCell>Pedido</TableCell>
-            <TableCell>Data</TableCell>
-            <TableCell>Cliente</TableCell>
-            <TableCell>Itens</TableCell>
-            <TableCell>Valor</TableCell>
+            <TableCell style={{ color: "#ffffff" }}>Pedido</TableCell>
+            <TableCell style={{ color: "#ffffff" }}>Data</TableCell>
+            <TableCell style={{ color: "#ffffff" }}>Cliente</TableCell>
+            <TableCell style={{ color: "#ffffff" }}>Itens</TableCell>
+            <TableCell style={{ color: "#ffffff" }}>Valor</TableCell>
 
           </TableRow>
 
@@ -111,11 +171,11 @@ function App() {
               style={{ cursor: "pointer" }}
               onClick={() => carregarItens(p.NUMPED)}>
 
-              <TableCell>{p.NUMPED}</TableCell>
-              <TableCell>{p.DATA}</TableCell>
-              <TableCell>{p.CODCLI}</TableCell>
-              <TableCell>{p.NUMITENS}</TableCell>
-              <TableCell>{p.VLTOTAL}</TableCell>
+              <TableCell style={{ color: "#ffffff" }}>{p.NUMPED}</TableCell>
+              <TableCell style={{ color: "#ffffff" }}>{p.DATA}</TableCell>
+              <TableCell style={{ color: "#ffffff" }}>{p.CODCLI}</TableCell>
+              <TableCell style={{ color: "#ffffff" }}>{p.NUMITENS}</TableCell>
+              <TableCell style={{ color: "#ffffff" }}>{p.VLTOTAL}</TableCell>
 
             </TableRow>
           ))}
@@ -129,10 +189,10 @@ function App() {
         <TableHead>
           <TableRow>
 
-            <TableCell>Produto</TableCell>
-            <TableCell>Descrição</TableCell>
-            <TableCell>Quantidade</TableCell>
-            <TableCell>Preço</TableCell>
+            <TableCell style={{ color: "#ffffff" }}>Produto</TableCell>
+            <TableCell style={{ color: "#ffffff" }}>Descrição</TableCell>
+            <TableCell style={{ color: "#ffffff" }}>Quantidade</TableCell>
+            <TableCell style={{ color: "#ffffff" }}>Preço</TableCell>
 
           </TableRow>
         </TableHead>
@@ -143,10 +203,10 @@ function App() {
 
             <TableRow key={index}>
 
-              <TableCell>{i.CODPROD}</TableCell>
-              <TableCell>{i.DESCRICAO}</TableCell>
-              <TableCell>{i.QT}</TableCell>
-              <TableCell>{i.PVENDA}</TableCell>
+              <TableCell style={{ color: "#ffffff" }}>{i.CODPROD}</TableCell>
+              <TableCell style={{ color: "#ffffff" }}>{i.DESCRICAO}</TableCell>
+              <TableCell style={{ color: "#ffffff" }}>{i.QT}</TableCell>
+              <TableCell style={{ color: "#ffffff" }}>{i.PVENDA}</TableCell>
 
             </TableRow>
           ))}
