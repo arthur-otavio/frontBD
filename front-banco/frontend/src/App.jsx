@@ -7,8 +7,12 @@ import {
   TableHead,
   TableRow,
   TableCell,
-  TableBody
+  TableBody,
+  Modal,
+  Box,
+  IconButton 
 } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 function App() {
 
@@ -17,6 +21,7 @@ function App() {
   const [codcli, setCodcli] = useState("");
   const [pedidos, setPedidos] = useState([]);
   const [itens, setItens] = useState([]);
+  const [openModal, setOpenModal] = useState(false);
 
   const moeda = (valor) => {
     return new Intl.NumberFormat("pt-BR", {
@@ -72,6 +77,7 @@ function App() {
     const dataItens = await resItens.json();
 
     setItens(dataItens);
+    setOpenModal(true);
   };
 
   return (
@@ -201,7 +207,7 @@ function App() {
 
             <TableCell style={{ color: "#ffffff" }}>Código Filial</TableCell>
             <TableCell style={{ color: "#ffffff" }}>Código Pedido</TableCell>
-            <TableCell style={{ color: "#ffffff" }}>Total Peso</TableCell>
+            <TableCell style={{ color: "#ffffff" }}>Peso Total</TableCell>
             <TableCell style={{ color: "#ffffff" }}>Data</TableCell> 
             <TableCell style={{ color: "#ffffff" }}>Cliente</TableCell>
             <TableCell style={{ color: "#ffffff" }}>Itens</TableCell>
@@ -234,44 +240,50 @@ function App() {
         </TableBody>
       </Table>
 
-      <h3 style={{ marginTop: 40, color: "#ffffff", background: "linear-gradient(90deg, #F36F21, #EC008C)", padding:"10px" }}>Produtos do Pedido</h3>
 
-      <Table>
-        <TableHead>
-          <TableRow>
+      <Modal open={openModal} onClose={(event, reason) => { if (reason !== "backdropClick") { setOpenModal(false) } }}>
+        <Box sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: { xs: "95%", sm: "90%", md: "80%", lg: "60%" }, maxHeight: "80vh", overflowY: "auto", bgcolor: "#332C2C", borderRadius: "10px", p: 4, boxShadow: 24}}>
+          <IconButton onClick={() => setOpenModal(false)} sx={{ position: "absolute", top: 10, left: 10, color: "#ffffff" }}> <CloseIcon />
+          </IconButton>
+          <h3 style={{ marginTop: 40, color: "#ffffff", background: "linear-gradient(90deg, #F36F21, #EC008C)", padding:"10px" }}>Produtos do Pedido</h3>
 
-            <TableCell style={{ color: "#ffffff" }}>Código Filial</TableCell>
-            <TableCell style={{ color: "#ffffff" }}>Código Produto</TableCell>
-            <TableCell style={{ color: "#ffffff" }}>Descrição</TableCell>
-            <TableCell style={{ color: "#ffffff" }}>Quantidade</TableCell>
-            <TableCell style={{ color: "#ffffff" }}>Preço Tabela</TableCell>
-            <TableCell style={{ color: "#ffffff" }}>Tipo de Entrega</TableCell>
-            <TableCell style={{ color: "#ffffff" }}>% Desc</TableCell>
-            <TableCell style={{ color: "#ffffff" }}>Preço Venda</TableCell>
+          <Table>
+            <TableHead>
+              <TableRow>
 
-          </TableRow>
-        </TableHead>
+                <TableCell style={{ color: "#ffffff" }}>Código Filial</TableCell>
+                <TableCell style={{ color: "#ffffff" }}>Código Produto</TableCell>
+                <TableCell style={{ color: "#ffffff" }}>Descrição</TableCell>
+                <TableCell style={{ color: "#ffffff" }}>Quantidade</TableCell>
+                <TableCell style={{ color: "#ffffff" }}>Preço Tabela</TableCell>
+                <TableCell style={{ color: "#ffffff" }}>Tipo de Entrega</TableCell>
+                <TableCell style={{ color: "#ffffff" }}>% Desc</TableCell>
+                <TableCell style={{ color: "#ffffff" }}>Preço Venda</TableCell>
 
-        <TableBody>
+              </TableRow>
+            </TableHead>
 
-          {itens.map((i, index) => (
+            <TableBody>
 
-            <TableRow key={index}>
+              {itens.map((i, index) => (
 
-              <TableCell style={{ color: "#ffffff" }}>{i.CODFILIALRETIRA}</TableCell>
-              <TableCell style={{ color: "#ffffff" }}>{i.CODPROD}</TableCell>
-              <TableCell style={{ color: "#ffffff" }}>{i.DESCRICAO}</TableCell>
-              <TableCell style={{ color: "#ffffff" }}>{i.QT}</TableCell>
-              <TableCell style={{ color: "#ffffff" }}>{moeda(i.PTABELA)}</TableCell>
-              <TableCell style={{ color: "#ffffff" }}>{i.TIPOENTREGA}</TableCell>
-              <TableCell style={{ color: "#ffffff" }}>{porcentagem(i.PERDESC)}</TableCell>
-              <TableCell style={{ color: "#ffffff" }}>{moeda(i.PVENDA)}</TableCell>
+                <TableRow key={index}>
 
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                  <TableCell style={{ color: "#ffffff" }}>{i.CODFILIALRETIRA}</TableCell>
+                  <TableCell style={{ color: "#ffffff" }}>{i.CODPROD}</TableCell>
+                  <TableCell style={{ color: "#ffffff" }}>{i.DESCRICAO}</TableCell>
+                  <TableCell style={{ color: "#ffffff" }}>{i.QT}</TableCell>
+                  <TableCell style={{ color: "#ffffff" }}>{moeda(i.PTABELA)}</TableCell>
+                  <TableCell style={{ color: "#ffffff" }}>{i.TIPOENTREGA}</TableCell>
+                  <TableCell style={{ color: "#ffffff" }}>{porcentagem(i.PERDESC)}</TableCell>
+                  <TableCell style={{ color: "#ffffff" }}>{moeda(i.PVENDA)}</TableCell>
 
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Box>
+      </Modal>
     </Container>
   );
 }

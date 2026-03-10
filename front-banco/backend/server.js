@@ -83,7 +83,6 @@ app.get("/pedido/:numped/itens", async (req, res) => {
         i.ptabela,
         i.perdesc,
         i.pvenda,
-        ROUND(i.qt * i.pvenda, 2) vltotalitem,
         ROUND(i.perdesc, 2) perdesc_formatado,
         i.tipoentrega,
         i.codfilialretira
